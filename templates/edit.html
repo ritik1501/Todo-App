@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block body %}
+
+<div class="container my-5">
+    <div class="card">
+        <div class="card-body">
+            <form action="/save/{{id}}/" method="POST">
+                {% csrf_token %}
+                <label for="Ttitle">Title: </label>
+                <input class="form-control" type="text" name="eTitle" id="Ttitle" value="{{title}}" required><br>
+                <label for="descri">Description: </label>
+                <input class="form-control" type="text" name="eDesc" id="descri" value="{{ content }}" required><br>
+                <label for="datetime">Date and Time: </label>
+                <input class="form-control" type="datetime-local" name="eDateTime" value="{{time}}"  id="datetime" required><br>
+                <button type="submit" class="btn btn-primary">Save Changes</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock body %}

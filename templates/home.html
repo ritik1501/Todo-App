@@ -1,0 +1,128 @@
+{% extends 'base.html' %}
+
+{% block title %}Home{% endblock title %}
+
+{% block body %}
+{% load humanize %}
+
+{% for vichar in thoughts %}
+<div class="bg-indigo-900 text-center py-1 lg:px-4">
+  <div class="p-2 bg-indigo-800 items-center text-indigo-100 leading-none lg:rounded-full flex lg:inline-flex" role="alert">
+    <span class="flex rounded-full bg-indigo-500 uppercase px-2 py-1 text-xs font-bold">{{vichar.vichar}}</span>
+  </div>
+</div>
+{% endfor %}
+
+{% if todos|length < 1  %}
+    <section class="text-gray-500 bg-gray-900 body-font">
+  <div class="container px-5 py-24 mx-auto flex flex-wrap">
+    <div class="lg:w-1/2 w-full mb-10 lg:mb-0 rounded-lg overflow-hidden">
+      <img alt="feature" class="object-cover object-center h-full w-full" src="https://www.vippng.com/png/full/431-4310179_todo-app-svg-icon.png">
+    </div>
+    <div class="flex flex-col flex-wrap lg:py-6 mb-10 lg:w-1/2 lg:pl-12 lg:text-left">
+      <div class="flex flex-col mb-4 lg:items-start items-center">
+        <div class="w-12 h-12 inline-flex items-center justify-center rounded-full bg-gray-800 text-indigo-400 mb-3">
+          <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-6 h-6" viewBox="0 0 24 24">
+            <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
+          </svg>
+        </div>
+        <div class="flex-grow">
+          <h2 class="text-white text-lg title-font font-medium">Black Color:</h2>
+          <p class="leading-relaxed text-base">Whenever you missed to complete the work in your provided time, It's background will be in black color.</p>
+        </div>
+      </div>
+      <div class="flex flex-col mb-4 lg:items-start items-center">
+        <div class="w-12 h-12 inline-flex items-center justify-center rounded-full bg-gray-800 text-indigo-400 mb-3">
+          <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-6 h-6" viewBox="0 0 24 24">
+            <circle cx="6" cy="6" r="3"></circle>
+            <circle cx="6" cy="18" r="3"></circle>
+            <path d="M20 4L8.12 15.88M14.47 14.48L20 20M8.12 8.12L12 12"></path>
+          </svg>
+        </div>
+        <div class="flex-grow">
+          <h2 class="text-white text-lg title-font font-medium mb-3"><a style="color:green;"> Green Color:</h2>
+          <p class="leading-relaxed text-base">When the time to complete the work is more than a day. Your work row is visible in <i> Green Color.</i></a></p>
+        </div>
+      </div>
+      <div class="flex flex-col mb-4 lg:items-start items-center">
+        <div class="w-12 h-12 inline-flex items-center justify-center rounded-full bg-gray-800 text-indigo-400 mb-3">
+          <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-6 h-6" viewBox="0 0 24 24">
+            <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"></path>
+            <circle cx="12" cy="7" r="4"></circle>
+          </svg>
+        </div>
+        <div class="flex-grow">
+          <h2 class="text-white text-lg title-font font-medium mb-3"><a style="color:red;">Red Color:</h2>
+          <p class="leading-relaxed text-base">When the time to complete the work is less than a day. Your work row is visible in <i> Red Color.</i></a></p>
+        </div>
+      </div>
+      <div class="flex flex-col lg:items-start items-center">
+        <div class="w-12 h-12 inline-flex items-center justify-center rounded-full bg-gray-800 text-indigo-400 mb-3">
+          <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-6 h-6" viewBox="0 0 24 24">
+              <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+          </svg>
+        </div>
+        <div class="flex-grow">
+          <h2 class="text-white text-lg title-font font-medium"><a style="color:yellow;">Yellow Color:</h2>
+          <p class="leading-relaxed text-base">When the time to complete the work is less than a minute. Your work row is visible in <i> Yellow Color.</i></a></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% else %}
+<div class="container my-5">
+    <center><h3 class="mb-5" style="color:white;">Your Works:</h3></center>
+    <table class="table table-striped table-dark table-hover mx-0">
+        <thead>
+            <tr>
+                <th scope="col">Title</th>
+                <th scope="col">Description</th>
+                <th scope="col">Edit</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for todo in todos %}
+            {% if 'ago' in todo.timestamp|naturaltime %}
+            <tr>
+            {% elif 'day' in todo.timestamp|naturaltime %}
+            <tr style="background: green; color:black; font-style:italic">
+                {% elif 'hour' in todo.timestamp|naturaltime %}
+            <tr style="background: red; color:black; font-style:italic">
+                {% elif 'minute' in todo.timestamp|naturaltime %}
+            <tr style="background: darkred; color:black; font-style:italic">
+                {% elif 'second' in todo.timestamp|naturaltime %}
+            <tr style="background: yellow; color:black; font-style:italic">
+                {% else %}
+            <tr style="background: green; color:black; font-style:italic"> 
+                {% endif %}
+                <th scope="row">
+                    <h6>{{todo.title|capfirst}}</h6>
+                    <a class="badge badge-primary">{{todo.timestamp|naturaltime}}</a>
+                </th>
+                <td>
+                    <p>{{todo.content|capfirst}}</p>
+                </td>
+                <td>
+                    <div class="row">
+                        <div class="col-md-4 mt-2">
+                            <form action="/edit/{{todo.id}}/">
+                                <button type="submit" class="btn btn-primary">Edit</button>
+                            </form>
+                        </div>
+                        <div class="col-md-4 mt-1">
+                            <form action="/delete/{{todo.id}}/" action="POST">
+                                <button type="submit"><img src="https://img.icons8.com/dusk/64/000000/waste.png" style="width: 70%; height: 70%;"/></button>
+                            </form>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% endif %}
+</div>
+
+
+{% endblock body %}
